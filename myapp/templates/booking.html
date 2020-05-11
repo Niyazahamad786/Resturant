@@ -1,0 +1,45 @@
+{% extends "layout.html"%}
+{% block content%}
+{% for pe in per%}
+
+    <article class="media content-section">
+        <div class="media-body">
+        <div class="article-metadata">
+            <h5 style="display:inline;">{{ pe[0] }}</h5> <h4 style="display:inline;">{{pe[1] }}  {{pe[2] }}</h4>
+            
+        </div>
+            <p class="article-content">
+            <div><label><h5>Table for:</h5></label>{{pe[3]}}</div>
+            <div><label><h5>Purpose:</h5></label>{{pe[4]}}</div>
+            <div><label><h5>Meal Plan:</h5></label>{{pe[5]}}</div>
+            <div><label><h5>Date:</h5></label>{{pe[6]}}</div>
+            <div><label><h5>Time:</h5></label>{{pe[7]}}</div>
+            </p>
+       
+        <div>
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Cancel</button>
+        </div>
+        
+        </div>
+    </article>
+    <!-- Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Cancel?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form action="{{ url_for('delete_values', person_id=pe[8],resturant_id=pe[9]) }}" method="POST">
+            <input class="btn btn-danger" type="submit" value="Confirm">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor  %}
+{% endblock %}

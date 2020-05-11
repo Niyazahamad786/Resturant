@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanks</title>
+    <style type="text/css">
+        div.container4 {
+    height: 10em;
+    position: relative }
+    div.container4 h1 {
+    margin: 0;
+   
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, 100%) }
+
+ 
+.wrapper {
+    text-align: center;
+}
+
+.button {
+    position: absolute;
+    top: 38%;
+    
+}
+    
+    
+    </style>
+</head>
+<body>
+    <div  class=container4><h1>Thanks For Booking!!!</h1></div>
+    <form action="{{ url_for('reserve') }}" method="GET">
+       <div class="wrapper"><input class="button" type="submit" value="Back"></div> 
+    </form>
+    
+</body>
+</html>
