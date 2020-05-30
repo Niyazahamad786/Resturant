@@ -36,6 +36,9 @@
     <form action="{{ url_for('reserve') }}" method="GET">
        <div class="wrapper"><input class="button" type="submit" value="Back"></div> 
     </form>
-    
+    {{user}}
+    {% for pe in per%}
+        {{pe}}
+    {% endfor %}
 </body>
 </html>

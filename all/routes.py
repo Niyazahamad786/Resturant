@@ -7,7 +7,6 @@ from datetime import *
 conn =sqlite3.connect('data.db',check_same_thread=False)
 c=conn.cursor()
 
-#c.execute("drop table Per_Res")
 c.execute(
     """CREATE TABLE IF NOT EXISTS User(
         id INTEGER PRIMARY KEY,
@@ -100,14 +99,18 @@ def reserve():
             re_id=re_id[0][0]
             with conn:
                 conn.execute("INSERT INTO Per_Res(per_id,res_id) VALUES (:per_id,:res_id )", {'per_id':person_id , 'res_id': re_id})
-            perr=conn.execute("SELECT title,first_name,last_name,tabl,purpose,meal,date,time,Person.id,Resturant.id,Per_Res.id from Person,Resturant,Per_Res where Person.id=Per_Res.per_id and Resturant.id=Per_Res.res_id ")
-            per=perr.fetchall()
             
+            user=session['user']
+            iddd=conn.execute("SELECT user.id from user where username='"+user+"'")
+            idd=iddd.fetchall()
+            idd=idd[0][0]
+            perr=conn.execute("SELECT Resturant.user_id,Person.user_id,title,first_name,last_name,tabl,purpose,meal,date,time,Person.id,Resturant.id,Per_Res.id from Person,Resturant,Per_Res where Person.id=Per_Res.per_id and Resturant.id=Per_Res.res_id  ")
+            per=perr.fetchall()
+            li=[]
             per.reverse() 
-            format_str = '%Y-%m-%d'
-            #datetime_obj = datetime.datetime.strptime(per[0][6], format_str)
-           
-            #da=type(datetime_obj)         
+            for pe in per:
+                if pe[0]==idd and pe[1]==idd:
+                    li.append(pe)     
             return render_template('thanks.html')
 
 
@@ -120,11 +123,19 @@ def reserve():
 @app.route('/booking',methods=['GET','POST'])
 def booking():
     if 'user' in session:
-        perr=conn.execute("SELECT title,first_name,last_name,tabl,purpose,meal,date,time,Person.id,Resturant.id,Per_Res.id from Person,Resturant,Per_Res where Person.id=Per_Res.per_id and Resturant.id=Per_Res.res_id ")
-        per=perr.fetchall()
+        user=session['user']
+        id=conn.execute("SELECT user.id from user where username='"+user+"'")
+        id=id.fetchall()
+        id=id[0][0]
+        perr=conn.execute("SELECT title,first_name,last_name,tabl,purpose,meal,date,time,Person.id,Resturant.id,Per_Res.id,Resturant.user_id,Person.user_id  from Person,Resturant,Per_Res where Person.id=Per_Res.per_id and Resturant.id=Per_Res.res_id  ")
+        per=perr.fetchall() 
         per.reverse()
-        datee=date.today()
-        return render_template('booking.html',per=per,datee=datee)
+        li=[]
+         
+        for pe in per:
+            if pe[11]==id and pe[12]==id:
+                li.append(pe)
+        return render_template('booking.html',per=li)
     else:
         return redirect(url_for('login'))
 
@@ -192,7 +203,6 @@ def login():
                 us_eer=conn.execute("SELECT username FROM User where email=  '" + emails[i] + "'")
                 user = us_eer.fetchall()
                 session["user"]= user[0][0]
-                flash('You have been loged in!!','success')
                 login_flag = True
                 return redirect(url_for('home'))
         if login_flag == False and 'user' not in session:  
